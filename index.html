@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="viewport" content="width=device-width initial-scale=1">
+    
+    <style>
+        body {
+    
+}
+.pp{
+    display:flex;
+    justify-content:center
+}
+#youtube-player{
+    width:80%;
+    height:300px;
+}
+
+.parent{
+    width:70%;
+    margin:15px auto;
+    border:2px solid grey;
+    padding:2px;
+    box-sizing:border-box;
+}
+
+.child{
+    width:0%;
+    height:15px;
+    background-color:#c85534;
+    transition:0.3s linear all;
+}
+
+.claim{
+    border:none;
+    outline:none;
+    padding:10px 25px;
+    border-radius:5px;
+    background-color:grey;
+    color:white;
+    font-size:25px;
+    font-weight:bold;
+}
+
+.stats, h2, h3{
+    text-align:center;
+}
+    </style>
+    
+        <title>Page Title</title>
+        <script async defer src="https://www.youtube.com/iframe_api"></script>
+
+    </head>
+    <body>
+    
+    <div>
+    <h2>Current Balance: <span class="balance">$0</span></h2>
+        <h3>Please watch this video for atleast 2 minutes to claim your reward.!</h3>
+    </div>
+    
+    
+    <div class="pp">
+        <div id="youtube-player"></div>
+        
+        </div>
+        
+        <div class="parent">
+            <div class="child"></div>
+        </div>
+        
+        <div class="stats">
+            <button class="claim"  onclick="claim()">Claim</button>
+            <h3 class="count"></h3>
+        </div>
+        
+
+<script>
+  // Variable to store the YouTube player object
+  let player;
+  let counter = 0;
+  let seconds = 0;
+  let claimed = false;
+
+  // Function called when the YouTube IFrame API is ready
+  function onYouTubeIframeAPIReady() {
+    // Create an instance of the YT.Player
+    player = new YT.Player('youtube-player', {
+      videoId: 'ObvwRUM2MUQ', // Replace with the actual YouTube video ID
+      playerVars: {
+        autoplay: 1, // Autoplay the video
+        controls: 1, // Hide video controls
+        disablekb: 1, // Disable keyboard controls
+        enablejsapi: 1, // Enable JavaScript API
+        modestbranding: 1, // Hide YouTube logo
+        playsinline: 1, // Play inline on mobile devices
+        rel: 0, // Disable related videos at the end
+        showinfo: 0, // Hide video title and uploader information
+
+      },
+      events: {
+        'onReady': onPlayerReady, // Callback when the player is ready
+        'onStateChange': onPlayerStateChange // Callback when the player's state changes
+      }
+    });
+  }
+
+  // Function called when the player is ready
+  function onPlayerReady(event) {
+    // Add an event listener to the player to handle the start of playback
+    event.target.playVideo();
+  }
+
+let id;
+  // Function called when the player's state changes
+  function onPlayerStateChange(event) {
+    // Check if the video has started playing (state 1)
+    if (event.data == YT.PlayerState.PLAYING) {
+    
+    
+    id = setInterval(()=>{
+    if(counter < 99){
+        counter+= 0.83;
+        seconds += 1;
+        document.querySelector('.child').style.width = counter + '%';
+        document.querySelector('.count').textContent = seconds;
+        } else{
+            document.querySelector(".claim").disabled = false;
+            document.querySelector(".claim").style.backgroundColor = "green";
+        }
+    }, 1000)
+      // Fire an event or execute code when the video starts playing
+      console.log('Video started playing!');
+    } else{
+        console.log("paused.!")
+        clearInterval(id)
+    }
+  }
+  
+  function claim(){
+      if(seconds < 120 && claimed === false){
+      let remaining = 120 - seconds;
+          alert("Sorry, still "+ remaining + " seconds remaining.!");
+          return;
+      } else if(claimed === false){
+      alert("Congrats.! You earned $3.5 !")
+          document.querySelector(".balance").textContent = "$3.5";
+          claimed = true;
+      } else{
+          alert("Reward already claimed.!");
+      }
+      }
+  
+</script>
+
+
+    </body>
+</html
